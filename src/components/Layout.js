@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 import "./Layout.css";
 
 const Layout = ({ children }) => {
@@ -17,6 +18,14 @@ const Layout = ({ children }) => {
   useEffect(() => {
     closeMenu();
   }, [location]);
+
+  // Use the custom hook to update the document title
+  useDocumentTitle({
+    "/work": "El Messeg - Work",
+    "/about": "El Messeg - About",
+    "/contact": "El Messeg - Contact",
+    "/": "El Messeg",
+  });
 
   return (
     <div>
