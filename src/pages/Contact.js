@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import emailjs from "emailjs-com";
 import Modal from "react-modal";
 import "./Contact.css";
@@ -59,10 +59,37 @@ const Contact = () => {
     });
   };
 
+  const handleModalClose = (e) => {
+    if (e.type === "click" || (e.type === "keydown" && e.key === "Enter")) {
+      setModalIsOpen(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  useEffect(() => {
+    if (modalIsOpen) {
+      const closeModalOnEnter = (e) => {
+        if (e.key === "Enter") {
+          setModalIsOpen(false);
+        }
+      };
+      window.addEventListener("keydown", closeModalOnEnter);
+      return () => {
+        window.removeEventListener("keydown", closeModalOnEnter);
+      };
+    }
+  }, [modalIsOpen]);
+
   return (
     <div className="contact-container">
       <h2>Contact Us</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input
@@ -127,7 +154,7 @@ const Contact = () => {
         overlayClassName="overlay"
       >
         <h2>{modalMessage}</h2>
-        <button onClick={() => setModalIsOpen(false)}>Close</button>
+        <button onClick={handleModalClose}>Close</button>
       </Modal>
     </div>
   );
