@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
+import Modal from "react-modal";
 import "./Contact.css";
 import { FaInstagram } from "react-icons/fa";
+
+Modal.setAppElement("#root"); // This is important for accessibility
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +13,8 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,11 +41,13 @@ const Contact = () => {
       .then(
         (response) => {
           console.log("SUCCESS!", response.status, response.text);
-          alert("Message sent successfully!");
+          setModalMessage("Message sent successfully!");
+          setModalIsOpen(true);
         },
         (err) => {
           console.log("FAILED...", err);
-          alert("Failed to send message. Please try again.");
+          setModalMessage("Failed to send message. Please try again.");
+          setModalIsOpen(true);
         }
       );
 
@@ -112,6 +119,16 @@ const Contact = () => {
           <FaInstagram /> Follow on Instagram
         </a>
       </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        contentLabel="Message Status"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2>{modalMessage}</h2>
+        <button onClick={() => setModalIsOpen(false)}>Close</button>
+      </Modal>
     </div>
   );
 };
