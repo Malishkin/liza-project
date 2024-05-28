@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Contact.css";
 import { FaInstagram } from "react-icons/fa";
+import axios from "axios";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,30 +17,23 @@ const Contact = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, message } = formData;
-    const mailtoLink = `mailto:malishkin2002@gmail.com?subject=Contact Form Submission&body=Name: ${encodeURIComponent(
-      name
-    )}%0D%0AEmail: ${encodeURIComponent(
-      email
-    )}%0D%0AMessage: ${encodeURIComponent(message)}`;
 
-    // Simulate clicking the mailto link
-    const a = document.createElement("a");
-    a.href = mailtoLink;
-    a.click();
-
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
-
-    setMessageSent(true);
-    setTimeout(() => {
-      setMessageSent(false);
-    }, 3000);
+    try {
+      await axios.post("http://localhost:5000/api/contact", formData);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+      setMessageSent(true);
+      setTimeout(() => {
+        setMessageSent(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Error sending message", error);
+    }
   };
 
   return (
