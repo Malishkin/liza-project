@@ -17,14 +17,18 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     closeMenu();
+    const content = document.getElementById("content");
+    content.classList.remove("animate");
+    // Trigger reflow to restart the animation
+    void content.offsetWidth;
+    content.classList.add("animate");
   }, [location]);
 
   // Use the custom hook to update the document title
   useDocumentTitle({
-    "/work": "El Messeg - Work",
+    "/": "El Messeg - Work",
     "/about": "El Messeg - About",
     "/contact": "El Messeg - Contact",
-    "/": "El Messeg",
   });
 
   return (
@@ -44,8 +48,8 @@ const Layout = ({ children }) => {
             <ul id="nav-links" className={menuOpen ? "show" : ""}>
               <li>
                 <Link
-                  to="/work"
-                  className={location.pathname === "/work" ? "active" : ""}
+                  to="/"
+                  className={location.pathname === "/" ? "active" : ""}
                   onClick={closeMenu}
                 >
                   Work
@@ -82,7 +86,9 @@ const Layout = ({ children }) => {
           </nav>
         </div>
       </header>
-      <div id="content">{children}</div>
+      <div id="content" className="animate">
+        {children}
+      </div>
     </div>
   );
 };

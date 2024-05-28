@@ -1,47 +1,60 @@
 import React, { useState } from "react";
+import emailjs from "emailjs-com";
 import "./Contact.css";
 import { FaInstagram } from "react-icons/fa";
-import axios from "axios";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    subject: "",
     message: "",
   });
-
-  const [messageSent, setMessageSent] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      await axios.post("http://localhost:5000/api/contact", formData);
-      setFormData({
-        name: "",
-        email: "",
-        message: "",
-      });
-      setMessageSent(true);
-      setTimeout(() => {
-        setMessageSent(false);
-      }, 3000);
-    } catch (error) {
-      console.error("Error sending message", error);
-    }
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+    };
+
+    emailjs
+      .send(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        process.env.REACT_APP_EMAILJS_USER_ID
+      )
+      .then(
+        (response) => {
+          console.log("SUCCESS!", response.status, response.text);
+          alert("Message sent successfully!");
+        },
+        (err) => {
+          console.log("FAILED...", err);
+          alert("Failed to send message. Please try again.");
+        }
+      );
+
+    setFormData({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
   };
 
   return (
     <div className="contact-container">
       <h2>Contact Us</h2>
-      {messageSent && (
-        <div className="confirmation-message">Message sent successfully!</div>
-      )}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
@@ -61,6 +74,17 @@ const Contact = () => {
             id="email"
             name="email"
             value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="subject">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={formData.subject}
             onChange={handleChange}
             required
           />
