@@ -152,6 +152,7 @@ const Contact = () => {
         contentLabel="Message Status"
         className="modal"
         overlayClassName="overlay"
+        onKeyDown={handleModalClose}
       >
         <h2>{modalMessage}</h2>
         <button onClick={handleModalClose}>Close</button>
