@@ -17,18 +17,14 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     closeMenu();
-    const content = document.getElementById("content");
-    content.classList.remove("animate");
-    // Trigger reflow to restart the animation
-    void content.offsetWidth;
-    content.classList.add("animate");
   }, [location]);
 
-  // Use the custom hook to update the document title
   useDocumentTitle({
     "/": "El Messeg - Work",
     "/about": "El Messeg - About",
     "/contact": "El Messeg - Contact",
+    "/admin": "El Messeg - Admin",
+    "/login": "El Messeg - Login",
   });
 
   return (
@@ -74,6 +70,15 @@ const Layout = ({ children }) => {
                 </Link>
               </li>
               <li>
+                <Link
+                  to="/admin"
+                  className={location.pathname === "/admin" ? "active" : ""}
+                  onClick={closeMenu}
+                >
+                  Admin
+                </Link>
+              </li>
+              <li>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -86,9 +91,7 @@ const Layout = ({ children }) => {
           </nav>
         </div>
       </header>
-      <div id="content" className="animate">
-        {children}
-      </div>
+      <div id="content">{children}</div>
     </div>
   );
 };
