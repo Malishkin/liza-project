@@ -65,6 +65,13 @@ const Contact = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
   useEffect(() => {
     if (modalIsOpen) {
       const closeModalOnEnter = (e) => {
@@ -82,7 +89,7 @@ const Contact = () => {
   return (
     <div className="contact-container">
       <h2>Contact Us</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input

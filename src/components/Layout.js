@@ -5,7 +5,6 @@ import "./Layout.css";
 
 const Layout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [contentClass, setContentClass] = useState("fade-in");
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -18,21 +17,18 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     closeMenu();
+    const content = document.getElementById("content");
+    content.classList.remove("animate");
+    // Trigger reflow to restart the animation
+    void content.offsetWidth;
+    content.classList.add("animate");
   }, [location]);
 
-  useEffect(() => {
-    setContentClass("");
-    setTimeout(() => {
-      setContentClass("fade-in");
-    }, 0);
-  }, [location.pathname]);
-
+  // Use the custom hook to update the document title
   useDocumentTitle({
     "/": "El Messeg - Work",
     "/about": "El Messeg - About",
     "/contact": "El Messeg - Contact",
-    "/admin": "El Messeg - Admin",
-    "/login": "El Messeg - Login",
   });
 
   return (
@@ -90,7 +86,7 @@ const Layout = ({ children }) => {
           </nav>
         </div>
       </header>
-      <div id="content" className={contentClass}>
+      <div id="content" className="animate">
         {children}
       </div>
     </div>
