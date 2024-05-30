@@ -28,15 +28,25 @@ const Admin = ({ token }) => {
   const handleImageChange = (e) => {
     setForm({
       ...form,
-      images: [...e.target.files].map((file) => URL.createObjectURL(file)),
+      images: e.target.files,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    Array.from(form.images).forEach((file) => {
+      formData.append("images", file);
+    });
+
     axios
-      .post("http://localhost:5000/api/content", form, {
-        headers: { "x-auth-token": token },
+      .post("http://localhost:5000/api/content", formData, {
+        headers: {
+          "x-auth-token": token,
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         setContent([...content, res.data]);
@@ -83,7 +93,11 @@ const Admin = ({ token }) => {
             <h3>{item.title}</h3>
             <p>{item.description}</p>
             {item.images.map((img, idx) => (
-              <img key={idx} src={img} alt={item.title} />
+              <img
+                key={idx}
+                src={`http://localhost:5000/${img}`}
+                alt={item.title}
+              />
             ))}
           </div>
         ))}

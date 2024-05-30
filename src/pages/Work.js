@@ -1,26 +1,30 @@
-import React from "react";
-import "./Work.css";
-import { workData } from "../data/data";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Work = () => {
+  const [content, setContent] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/content')
+      .then(res => setContent(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
   return (
     <div className="work-container">
-      <div className="work-section">
-        {workData.map((categoryData, index) => (
-          <div className="work-category" key={index}>
-            <div className="work-gallery">
-              {categoryData.images.map((image, idx) => (
-                <div className="work-item" key={idx}>
-                  <img src={image} alt={`Work ${idx + 1}`} />
-                  {image === categoryData.shortImage && (
-                    <h2 className="category-title">{categoryData.category}</h2>
-                  )}
-                </div>
-              ))}
-            </div>
+      {content.map(item => (
+        <div key={item._id} className="work-category">
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+          <div className="work-gallery">
+            {item.images.map((img, idx) => (
+              <div key={idx} className="work-item">
+                <img src={`http://localhost:5000/${img}`} alt={item.title} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

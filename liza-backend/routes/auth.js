@@ -4,16 +4,21 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const user = new User({ username, password });
-    await user.save();
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+// Register a fixed admin user if not already registered
+const registerAdmin = async () => {
+  const username = "admin";
+  const password = "adminpassword";
+  const user = await User.findOne({ username });
+  if (!user) {
+    const newUser = new User({ username, password });
+    await newUser.save();
+    console.log("Admin user registered");
+  } else {
+    console.log("Admin user already exists");
   }
-});
+};
+
+registerAdmin();
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;

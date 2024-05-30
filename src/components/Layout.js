@@ -70,15 +70,6 @@ const Layout = ({ children }) => {
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/admin"
-                  className={location.pathname === "/admin" ? "active" : ""}
-                  onClick={closeMenu}
-                >
-                  Admin
-                </Link>
-              </li>
-              <li>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
