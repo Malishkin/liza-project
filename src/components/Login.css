@@ -23,6 +23,7 @@ input[type="password"] {
 }
 
 .filter button {
+  margin: auto !important;
   background-color: #007bff;
   color: #fff;
   padding: 8px 12px;
@@ -38,10 +39,11 @@ input[type="password"] {
   background-color: #0056b3;
 }
 
-@media screen and (max-width: 1024px) {
-  .filter-row {
+@media screen and (max-width: 768px) {
+  .filter {
+    display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: center;
   }
 
   .filter-group {

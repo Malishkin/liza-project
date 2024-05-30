@@ -74,7 +74,8 @@ const Admin = ({ token }) => {
               placeholder="Title"
               required
             />
-
+          </div>
+          <div className="filter-group">
             <textarea
               name="description"
               value={form.description}
