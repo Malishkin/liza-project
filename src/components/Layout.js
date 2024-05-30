@@ -5,6 +5,7 @@ import "./Layout.css";
 
 const Layout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contentClass, setContentClass] = useState("fade-in");
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -18,6 +19,13 @@ const Layout = ({ children }) => {
   useEffect(() => {
     closeMenu();
   }, [location]);
+
+  useEffect(() => {
+    setContentClass("");
+    setTimeout(() => {
+      setContentClass("fade-in");
+    }, 0);
+  }, [location.pathname]);
 
   useDocumentTitle({
     "/": "El Messeg - Work",
@@ -82,7 +90,9 @@ const Layout = ({ children }) => {
           </nav>
         </div>
       </header>
-      <div id="content">{children}</div>
+      <div id="content" className={contentClass}>
+        {children}
+      </div>
     </div>
   );
 };
