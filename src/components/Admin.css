@@ -15,7 +15,9 @@
 }
 
 .filter input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="file"],
+textarea {
   width: 80%;
   padding: 8px;
   border: 1px solid #ccc;

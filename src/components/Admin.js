@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./Admin.css";
 
 const Admin = ({ token }) => {
   const [content, setContent] = useState([]);
@@ -60,47 +61,54 @@ const Admin = ({ token }) => {
   };
 
   return (
-    <div>
-      <h1>Admin Panel</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="Title"
-          required
-        />
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          placeholder="Description"
-          required
-        ></textarea>
-        <input
-          type="file"
-          name="images"
-          multiple
-          onChange={handleImageChange}
-        />
-        <button type="submit">Save</button>
-      </form>
-      <div>
-        <h2>Content</h2>
-        {content.map((item) => (
-          <div key={item._id}>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            {item.images.map((img, idx) => (
-              <img
-                key={idx}
-                src={`http://localhost:5000/${img}`}
-                alt={item.title}
-              />
-            ))}
+    <div className="filter">
+      <h2>Admin Panel</h2>
+      <div className="filter-row">
+        <form onSubmit={handleSubmit}>
+          <div className="filter-group">
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Title"
+              required
+            />
+
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              placeholder="Description"
+              required
+            ></textarea>
           </div>
-        ))}
+          <div className="filter-group">
+            <input
+              type="file"
+              name="images"
+              multiple
+              onChange={handleImageChange}
+            />
+          </div>
+          <button type="submit">Save</button>
+        </form>
+        <div className="filter">
+          <h2>Content</h2>
+          {content.map((item) => (
+            <div className="filter-group" key={item._id}>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              {item.images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={`http://localhost:5000/${img}`}
+                  alt={item.title}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
