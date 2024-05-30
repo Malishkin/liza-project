@@ -29,6 +29,8 @@ const Layout = ({ children }) => {
     "/": "El Messeg - Work",
     "/about": "El Messeg - About",
     "/contact": "El Messeg - Contact",
+    "/admin": "El Messeg - Admin",
+    "/login": "El Messeg - Login",
   });
 
   return (
@@ -71,6 +73,15 @@ const Layout = ({ children }) => {
                   onClick={closeMenu}
                 >
                   Contact
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin"
+                  className={location.pathname === "/admin" ? "active" : ""}
+                  onClick={closeMenu}
+                >
+                  Admin
                 </Link>
               </li>
               <li>
