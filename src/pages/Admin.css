@@ -1,29 +1,26 @@
-.filter-row {
+.admin-container .admin-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
-.filter-group {
-  flex: 1;
-  text-align: center;
-}
-
-.filter h2 {
+.admin-container h2 {
   display: flex;
   justify-content: center;
 }
 
-.filter input[type="text"],
-input[type="password"] {
+.admin-container input[type="text"],
+input[type="password"],
+input[type="file"],
+textarea {
   width: 80%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
 
-.filter button {
-  margin: auto !important;
+.admin-container button {
   background-color: #007bff;
   color: #fff;
   padding: 8px 12px;
@@ -35,24 +32,23 @@ input[type="password"] {
   display: flex;
 }
 
-.filter button:hover {
+.admin-container button:hover {
   background-color: #0056b3;
 }
 
 @media screen and (max-width: 768px) {
-  .filter {
-    display: flex;
+  .admin-container .admin-group {
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
   }
 
-  .filter-group {
+  .admin-container .admin-group {
     width: 100%;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
   }
 
-  .filter button {
+  .admin-container button {
     margin: 10px auto 0;
     max-width: 50%;
   }
