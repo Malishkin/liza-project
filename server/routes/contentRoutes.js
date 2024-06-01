@@ -7,8 +7,8 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Получение всего контента
-router.get("/content", auth, async (req, res) => {
+// Получение всего контента (доступно без авторизации)
+router.get("/content", async (req, res) => {
   try {
     const content = await Content.find();
     res.json(content);
@@ -18,7 +18,7 @@ router.get("/content", auth, async (req, res) => {
   }
 });
 
-// Добавление нового контента
+// Добавление нового контента (требуется авторизация)
 router.post("/content", [auth, upload.array("images")], async (req, res) => {
   const { category, description } = req.body;
   const images = req.files.map(
@@ -35,7 +35,7 @@ router.post("/content", [auth, upload.array("images")], async (req, res) => {
   }
 });
 
-// Удаление контента
+// Удаление контента (требуется авторизация)
 router.delete("/content/:id", auth, async (req, res) => {
   try {
     await Content.findByIdAndDelete(req.params.id);
