@@ -1,14 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./Login.css";
+
+const checkTokenExpiration = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
+
+  const decodedToken = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
+
+  if (decodedToken.exp < currentTime) {
+    localStorage.removeItem("token");
+    return false;
+  }
+
+  return true;
+};
 
 const Login = ({ setToken }) => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!checkTokenExpiration()) {
+      setToken(null);
+    }
+  }, [setToken]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

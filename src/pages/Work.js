@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./Work.css";
-import { workData } from "../data/data";
 
 const Work = () => {
+  const [workData, setWorkData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/content", {
+        headers: { "x-auth-token": localStorage.getItem("token") },
+      })
+      .then((res) => setWorkData(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div className="work-container">
       <div className="work-section">

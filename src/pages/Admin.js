@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import "./Admin.css";
 
-const Admin = ({ token }) => {
+const checkTokenExpiration = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
+
+  const decodedToken = jwtDecode(token);
+  const currentTime = Date.now() / 1000;
+
+  if (decodedToken.exp < currentTime) {
+    localStorage.removeItem("token");
+    return false;
+  }
+
+  return true;
+};
+
+const Admin = ({ token, setToken }) => {
   const navigate = useNavigate();
   const [content, setContent] = useState([]);
   const [form, setForm] = useState({
-    title: "",
+    category: "",
     description: "",
     images: [],
   });
 
   useEffect(() => {
-    if (!token) {
+    if (!checkTokenExpiration()) {
+      setToken(null);
       navigate("/login");
     } else {
       axios
@@ -23,7 +40,7 @@ const Admin = ({ token }) => {
         .then((res) => setContent(res.data))
         .catch((err) => console.error(err));
     }
-  }, [token, navigate]);
+  }, [token, navigate, setToken]);
 
   const handleChange = (e) => {
     setForm({
@@ -42,7 +59,7 @@ const Admin = ({ token }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("title", form.title);
+    formData.append("category", form.category);
     formData.append("description", form.description);
     Array.from(form.images).forEach((file) => {
       formData.append("images", file);
@@ -58,10 +75,21 @@ const Admin = ({ token }) => {
       .then((res) => {
         setContent([...content, res.data]);
         setForm({
-          title: "",
+          category: "",
           description: "",
           images: [],
         });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/api/content/${id}`, {
+        headers: { "x-auth-token": token },
+      })
+      .then((res) => {
+        setContent(content.filter((item) => item._id !== id));
       })
       .catch((err) => console.error(err));
   };
@@ -73,10 +101,10 @@ const Admin = ({ token }) => {
         <div className="admin-group">
           <input
             type="text"
-            name="title"
-            value={form.title}
+            name="category"
+            value={form.category}
             onChange={handleChange}
-            placeholder="Title"
+            placeholder="Category"
             required
           />
         </div>
@@ -101,15 +129,16 @@ const Admin = ({ token }) => {
           <button type="submit">Save</button>
         </div>
       </form>
+      <h2 className="content-title">Content List</h2>
       <div className="content-list">
-        <h2>Content</h2>
         {content.map((item) => (
           <div className="content-item" key={item._id}>
-            <h3>{item.title}</h3>
+            <h3>{item.category}</h3>
             <p>{item.description}</p>
             {item.images.map((img, idx) => (
-              <img key={idx} src={img} alt={item.title} />
+              <img key={idx} src={img} alt={item.category} />
             ))}
+            <button onClick={() => handleDelete(item._id)}>Delete</button>
           </div>
         ))}
       </div>
